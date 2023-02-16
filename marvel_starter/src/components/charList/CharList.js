@@ -10,10 +10,10 @@ const CharList = (props) => {
 
     const [charList, setCharList] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useEffect(false);
-    const [newItemLoading, setNewItemLoading] = useEffect(false);
-    const [offset, setOffset] = useEffect(210);
-    const [charEnded, setCharEnded] = useEffect(false);
+    const [error, setError] = useState(false);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [offset, setOffset] = useState(210);
+    const [charEnded, setCharEnded] = useState(false);
 
     const marvelService = new MarvelService();
 
@@ -53,10 +53,12 @@ const CharList = (props) => {
     const itemRefs = useRef([]);
 
     const focusOnItem = (id) => {
+
         itemRefs.current.forEach(item => item.classList.remove('char__item_selected'));
         itemRefs.current[id].classList.add('char__item_selected');
         itemRefs.current[id].focus();
     }
+
 
     function renderItems(arr) {
         const items = arr.map((item, i) => {
@@ -72,8 +74,8 @@ const CharList = (props) => {
                     ref={el => itemRefs.current[i] = el}
                     key={item.id}
                     onClick={() => {
-                        this.props.onCharSelected(item.id);
-                        this.focusOnItem(i);
+                        props.onCharSelected(item.id);
+                        focusOnItem(i);
                     }}
                     onKeyPress={(e) => {
                         if (e.key === ' ' || e.key === "Enter") {
@@ -86,7 +88,7 @@ const CharList = (props) => {
                 </li>
             )
         });
-
+        // А эта конструкция вынесена для центровки спиннера/ошибки
         return (
             <ul className="char__grid">
                 {items}
@@ -115,7 +117,6 @@ const CharList = (props) => {
         </div>
     )
 }
-
 
 CharList.propTypes = {
     onCharSelected: PropTypes.func.isRequired
